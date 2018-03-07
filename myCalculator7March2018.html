@@ -1,0 +1,579 @@
+<html>
+<head>
+<title> myCalculator </title>
+<style>
+ #myDisplay {
+    font-size: 12px;
+	border: 2px solid red;
+	outline-style: solid green;
+	width:90%;
+	background-color: yellow;
+	margin: 4px 2px;
+     }
+ 
+ 
+ 
+
+#kbd {
+    border: 2px solid red;
+	outline-style: solid green;
+	width:80%;
+	background-color: beige;
+     }
+	 
+.bigButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    
+} 
+	 
+ 
+	 
+	 
+	 
+	 
+	 
+
+</style>
+
+
+
+<script>
+var mySum=0;
+var noOFdecimalplaces=4;
+var cc=[];
+var Xcos=[];var Xsin=[];
+var Xph=[];var Xmag=[];
+var n,m,N;
+//,Xsin[],Xph[],Xmag[];
+
+var myErrMsgFact;
+var buffer=0;
+var display ,b;
+var mirrorDisplay;   // for evaluation purposes
+stdDevFlag=0;
+avgFlag=0; // 1 when Avg() key clicked
+sigmaFlag=0;// 1 when sigma button clicked
+dftFlag=0; // 1 when DFT key is clicked
+sqrootFlag=0; // 1 when square root key clicked
+var myTrigFlag=0;
+var sqrFlag      =0; // 1 indicates Square button pressed
+var degrFlag =0;     // 1 degrees mode
+var InverseFlag =0; // 1 Indicates inverse mode
+var factFlag     =0; // 1 Indicates factorial key is pressed
+
+function shriGanesh() 
+{
+   myErrMsgFact      = 'Factorial is defined for positive integers only !';
+   display           = document.getElementById("myDisplay");
+   display.innerHTML = '=>';
+    
+   mirrorDisplay ='';
+   
+   qq=document.getElementById('Deg');
+   d=document.getElementById('Deg').innerHTML;	  
+   //alert(' d= '+ d );   
+   
+   if (d=='Degrees'){ 
+                    //document.getElementById('Deg').innerHTML='Radians';
+					qq.style.backgroundColor="yellow" ;
+					myMess.style.backgroundColor="yellow";
+				  }
+     else { //document.getElementById('Deg').innerHTML='Degrees';
+	       qq.style.backgroundColor="red";
+		   myMess.style.backgroundColor="red";
+	      }
+     
+   Math.sind=function(x){return Math.sin((x*Math.PI)/180);}						
+   Math.cosd=function(x){return Math.cos((x*Math.PI)/180);}						
+   Math.tand=function(x){return Math.tan((x*Math.PI)/180);}	
+   document.getElementById('myMess').innerHTML='Angles are in  '+document.getElementById('Deg').innerHTML;						
+}// ENd of ShriGanesh()
+
+function  myKeyHandler(n)
+{
+   
+   switch(n){
+   case 'StdDev': 
+             stdDevFlag=1; // ! is not passed to mirrorDisplay which passed to eval()
+             display.innerHTML   = display.innerHTML + 'StdDev'+'(';
+			 break
+   
+   
+   
+   case 'average': 
+             avgFlag=1; // ! is not passed to mirrorDisplay which passed to eval()
+             display.innerHTML   = display.innerHTML + 'Avg'+'(';
+			 break
+   
+   
+   
+   case 'jodi': 
+             sigmaFlag=1; // ! is not passed to mirrorDisplay which passed to eval()
+             display.innerHTML   = display.innerHTML + '&#931'+'(';
+			 break
+				 
+   
+   case 'DFT': 
+             dftFlag=1; // ! is not passed to mirrorDisplay which passed to eval()
+             display.innerHTML   = display.innerHTML + n+'(';
+			 break;
+   
+   
+   case '!': 
+             factFlag=1; // ! is not passed to mirrorDisplay which passed to eval()
+             display.innerHTML   = display.innerHTML + n;
+			 break;
+   case 'square' :
+             sqrFlag=1;
+			 display.innerHTML   = display.innerHTML +'<sup>2</sup>';
+			 break;
+   case 'root' :
+             sqrootFlag=1;
+			 display.innerHTML   = display.innerHTML +'&#8730'+'(';
+			 mirrorDisplay=mirrorDisplay + '(' ; 
+			 break;
+	case 'pi'	:
+	         display.innerHTML   = display.innerHTML +'&#960';
+			 mirrorDisplay=mirrorDisplay +'4*Math.atan(1)';
+			 break;
+	// closing bracket is suppressed from calculation
+	case ')'    :
+	             if (dftFlag==1)      { display.innerHTML=display.innerHTML + n;break}
+				 if (sigmaFlag==1)    { display.innerHTML=display.innerHTML + n;break}
+				 if (avgFlag==1)      { display.innerHTML=display.innerHTML + n;break}
+				 if (stdDevFlag==1)   { display.innerHTML=display.innerHTML + n;break}
+   default:
+             display.innerHTML=display.innerHTML + n;
+             mirrorDisplay=mirrorDisplay + n ; 	
+   
+            }// end of switch case 
+   
+   
+}//end of function myKeyHandler()
+
+
+function myTrigHandler(x)
+{
+    myTrigFlag=1;
+    if (x=='sin') 
+   { 
+      x='sin(';
+	  display.innerHTML=display.innerHTML + x;
+	  if( document.getElementById('Deg').innerHTML=='Degrees') 
+	  
+	  {
+	    document.getElementById('myMess').innerHTML='Angles in degrees';
+	    mirrorDisplay=mirrorDisplay+'Math.sind(' ; 
+	  
+	  }
+	  else {
+            document.getElementById('myMess').innerHTML='Angles in radians';
+	        mirrorDisplay=mirrorDisplay+'Math.sin(' ;
+			}
+	  
+    }// end of sine 
+	
+	if (x=='cos') 
+   { 
+      x='cos(';
+	  display.innerHTML=display.innerHTML + x;
+	  if( document.getElementById('Deg').innerHTML=='Degrees') 
+	  
+	  {
+	    document.getElementById('myMess').innerHTML='Angles in degrees';
+	    mirrorDisplay=mirrorDisplay+'Math.cosd(' ; 
+	  
+	  }
+	  else {
+            document.getElementById('myMess').innerHTML='Angles in radians';
+	        mirrorDisplay=mirrorDisplay+'Math.cos(' ;
+			}
+	  
+    }// end of cosine
+	
+	if (x=='tan') 
+   { 
+      x='tan(';
+	  display.innerHTML=display.innerHTML + x;
+	  if( document.getElementById('Deg').innerHTML=='Degrees') 
+	  
+	  {
+	    document.getElementById('myMess').innerHTML='Angles in degrees';
+	    mirrorDisplay=mirrorDisplay+'Math.tand(' ; 
+	  
+	  }
+	  else {
+            document.getElementById('myMess').innerHTML='Angles in radians';
+	        mirrorDisplay=mirrorDisplay+'Math.tan(' ;
+			}
+	  
+    }// end of tangent
+	
+	if (x=='asin') 
+   { 
+     InverseFlag=1;
+      x='asin(';
+	  display.innerHTML=display.innerHTML + x;
+	  if( document.getElementById('Deg').innerHTML=='Degrees') {
+	    document.getElementById('myMess').innerHTML='Angles in degrees';  
+	   } else {document.getElementById('myMess').innerHTML='Angles in radians';	}  
+	 mirrorDisplay=mirrorDisplay+'Math.asin(' ; 
+    }// end of asin  (sine-inverse)
+	
+	if (x=='acos') 
+   { 
+     InverseFlag=1;
+      x='acos(';
+	  display.innerHTML=display.innerHTML + x;
+	  if( document.getElementById('Deg').innerHTML=='Degrees') {
+	    document.getElementById('myMess').innerHTML='Angles in degrees';  
+	   } else {document.getElementById('myMess').innerHTML='Angles in radians';	}  
+	 mirrorDisplay=mirrorDisplay+'Math.acos(' ; 
+    }// end of acos  (cosine-inverse)
+	
+	if (x=='atan') 
+   { 
+     InverseFlag=1;
+      x='atan(';
+	  display.innerHTML=display.innerHTML + x;
+	  if( document.getElementById('Deg').innerHTML=='Degrees') {
+	    document.getElementById('myMess').innerHTML='Angles in degrees';  
+	   } else {document.getElementById('myMess').innerHTML='Angles in radians';	}  
+	 mirrorDisplay=mirrorDisplay+'Math.atan(' ; 
+    }// end of atan (tan-inverse)
+}// End of function myTrighandler(x)
+//================================
+// When = key is clicked
+//================================
+ function eqKeyClicked() //Linked with = button click event
+{
+ 
+ if (stdDevFlag==1)    { myStdDevCalc();return }
+ 
+ if (avgFlag==1)    { myAvgCalc();return }
+ if (sigmaFlag==1)    { mySigmaCalc();return }
+ if (dftFlag==1)    { myDFTCalc();return }
+ 
+ if (sqrFlag==1)    { mySquareCalc();return }
+ 
+ if(sqrootFlag==1)  { mySqrtCalc();return }
+ 
+ if (factFlag==1)   { myFactCalc();return   } 
+ 
+ if (myTrigFlag==1) { myTrigCalc();return   }
+    
+ // alert('mirrorDisplay=  '+ mirrorDisplay );
+ 
+ b                 = eval(mirrorDisplay); // <===== Heart of the calculator 
+ display.innerHTML = display.innerHTML+' = '+ b;
+ 
+}//End of function eqKeyClicked()
+///*
+
+function myStdDevCalc(){
+
+                         stdDevFlag=0;
+						 mySum=0; myAvg=0; var myVariance=0;var myVariance1=0; var mySigma1=0;var myVariance2=0; var mySigma2=0;
+						 //alert('mirrorDisplay=  '+ mirrorDisplay);
+						 var myArray=mirrorDisplay.split(',');
+						 var Nsamp = myArray.length;
+						 //alert('Nsamp=   '+ Nsamp  );
+						 for(var ss=0; ss <= (Nsamp-1);ss++)
+						   {
+						   //alert('myArray=  '+ myArray[ss]);
+						     mySum=mySum+eval(myArray[ss]);
+						     myAvg=mySum/(myArray.length);
+						   }// end of for loop
+						 //display.innerHTML=display.innerHTML+'='+myAvg;
+						 
+						 for(var ss=0; ss <= (Nsamp-1);ss++){
+						                        myVariance=myVariance+(myArray[ss]-myAvg)*(myArray[ss]-myAvg);
+						 }//End of for loop
+						 myVariance1=myVariance/((Nsamp)-1);
+						 myVariance2=myVariance/((Nsamp));
+						 mySigma1=eval(Math.sqrt(myVariance1));
+						 mySigma1=mySigma1.toFixed(noOFdecimalplaces);
+						 mySigma2=eval(Math.sqrt(myVariance2));
+						 mySigma2=mySigma2.toFixed(noOFdecimalplaces);
+						 
+						 //alert(' mySigma1 '+mySigma1);
+						 display.innerHTML=display.innerHTML+'='+'Sample'+' Sigma= '+mySigma1+'  Population Sigma = '+mySigma2;
+						 
+						 
+                        }//End of function myStdDevCalc()
+
+
+
+
+function myAvgCalc() {
+                         avgFlag=0;
+						 mySum=0; myAvg=0;
+						 //alert('mirrorDisplay=  '+ mirrorDisplay);
+						 var myArray=mirrorDisplay.split(',');
+						 var Nsamp = myArray.length;
+						 for(var ss=0; ss <= (Nsamp-1);ss++)
+						 {
+						  // alert('myArray=  '+ myArray[ss]);
+						   mySum=mySum+eval(myArray[ss]);
+						   myAvg=mySum/(myArray.length);
+						 }
+						 display.innerHTML=display.innerHTML+'='+myAvg;
+                       }// End of function myAvgCalc()
+
+//*/
+
+
+
+
+
+function mySigmaCalc() {
+                         sigmaFlag=0;
+						 mySum=0;
+						 //alert('mirrorDisplay=  '+ mirrorDisplay);
+						 var myArray=mirrorDisplay.split(',');
+						 
+						 for(var ss=0; ss <= (myArray.length-1);ss++)
+						 {
+						  // alert('myArray=  '+ myArray[ss]);
+						   mySum=mySum+eval(myArray[ss]);
+						   
+						 }
+						 display.innerHTML=display.innerHTML+'='+mySum;
+                       }// End of function mySigmaCalc()
+
+
+function myDFTCalc(){
+                        					 
+					dftFlag=0;	
+                    var a = mirrorDisplay ;	     
+	                var sampArray =a.split(',');
+	                x =sampArray.map(Number);						
+                    //alert('Samples are '+x);					
+        N = x.length;
+   // initialize all dfts to zero   
+   for (m=0;m<N;m++)
+       {
+         Xcos[m]=0;
+	     Xsin[m]=0;
+	     Xmag[m]=0;
+	     Xph[m]=0;
+      }// End of first for loop
+   
+   for (m=0;m<N;m++)
+   {
+     for (n=0; n<N; n++)
+	 {
+	  Xcos[m]=Xcos[m]+x[n]*Math.cos((2*(Math.PI)*m*n)/(N));	  
+	  Xsin[m]=Xsin[m]-x[n]*Math.sin((2*(Math.PI)*m*n)/(N));
+	  //minus sign because of exp(-2*pi*m*n /N)=cos(..)-j*sin(..) 
+	 } // end of inner for loop
+	 
+	  Xmag[m]=Math.sqrt(Xcos[m]*Xcos[m]+Xsin[m]*Xsin[m]);
+	  Xph[m]=Math.atan2(Xsin[m],Xcos[m]);
+	   Xcos[m]=Xcos[m].toFixed(noOFdecimalplaces);
+	   Xsin[m]=Xsin[m].toFixed(noOFdecimalplaces);
+	  cc[m]='&nbsp&nbsp&nbspX['+m+']&nbsp=&nbsp'+Xcos[m]+'+j'+ Xsin[m]+'&nbsp&nbsp&nbsp<br/>';
+	 
+	 
+	 
+   } // end of outer for loop
+	  
+	 //aa=Xcos.join('    ,    ' );
+	 //bb=Xsin.join('  j ,    ' );	 
+	 //myDisplay.innerHTML=myDisplay.innerHTML+' = '+'<br/>'+'Real Part of DFT=  '+aa+'<br/>'+'Imag part of DFT =   '+bb+'j';
+	 myDisplay.innerHTML=myDisplay.innerHTML+' = '+'<br/>'+cc;
+	}// End of function myDFTCalc()  
+
+
+
+
+
+
+function mySquareCalc(){
+                        					 
+					    sqrFlag=0;				         
+                        b = eval(mirrorDisplay*mirrorDisplay); // <===== Heart of the calculator
+					    display.innerHTML=display.innerHTML+' = '+ b;
+                        }// End of mySquareCalc()
+						
+function mySqrtCalc(){
+                        					 
+					    sqrootFlag=0;				         
+                        //alert('mirroe.Display=  '+ mirrorDisplay)
+                        // inside eval() is to get rid of brackets
+					    b = eval(Math.sqrt(eval(mirrorDisplay))); // <===== Heart of the calculator
+					    display.innerHTML=display.innerHTML+' = '+ b;
+                        }// End of mySqrtCalc()
+
+function myTrigCalc(){
+            if( document.getElementById('Deg').innerHTML=='Degrees') {degrFlag=1;}
+
+            b=eval(mirrorDisplay); // <===== Heart of the calculator  
+ 
+           if ((degrFlag ==1) && (InverseFlag==1) ) { (b=b*(180/Math.PI)); } 
+ 
+           display.innerHTML=display.innerHTML+' = '+ b;
+           degrFlag=0;InverseFlag=0;
+
+}// End of function myTrigCalc()
+
+function myFactCalc(){
+
+if ((mirrorDisplay.indexOf('.') > -1 )||(mirrorDisplay.indexOf('-') > -1))
+
+            { display.innerHTML=myErrMsgFact; 
+			   factFlag=0;
+			  return;
+			}
+	else {
+	       display.innerHTML=display.innerHTML+' = '+ myFact(mirrorDisplay);
+	       factFlag = 0;
+	       return;
+		}
+
+}//End of function myFactCalc()
+
+
+
+
+
+function myFact(m){
+    if((m==1)||( m==0) ) { return 1;}
+   else{return (m*myFact(m-1));}
+} // End of function myFact()
+
+
+ function myAllClear()
+ {
+   shriGanesh();
+  //location.reload();
+  //display.innerHTML='';
+  //mirrorDisplay=display.innerHTML;
+ } // End of function myAllClear()
+
+function myToggleDeg()
+{
+ d=document.getElementById('Deg').innerHTML;
+ qq=document.getElementById('Deg');	
+ if (d=='Degrees'){ 
+                    document.getElementById('Deg').innerHTML='Radians';
+					qq.style.backgroundColor="red" ;
+					myMess.style.backgroundColor="red" ;
+				  }
+     else {document.getElementById('Deg').innerHTML='Degrees';
+	       qq.style.backgroundColor="yellow";
+		   myMess.style.backgroundColor="yellow" ;
+	      }
+	 
+     document.getElementById('myMess').innerHTML='Angles are in  '+ document.getElementById('Deg').innerHTML;
+} // End of myToggleDeg()
+
+function delKeyClick(){
+              display.innerHTML='This feature is under development. Stay tuned!';
+}// End of function delKeyClick()
+
+ 
+
+
+
+
+</script>
+
+
+
+
+
+
+</head>
+<body onload='shriGanesh()'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <div id='kbd'    >
+<h3>  Kasa Basa Calci </h3>
+<h6> S R Bhide /7 March,2018/Added Std Dev </h6>
+<p id='myDisplay' >  </p> 
+<button id='myMess'> </button> 
+<hr>
+
+Toggle&#8594<button id='Deg' onclick="myToggleDeg()" > Radians </button><br/> 
+
+<button id='sin'  onclick="myTrigHandler('sin')"  >  &nbsp&nbspsin() </button>  
+<button id='cos'  onclick="myTrigHandler('cos')"  >  &nbsp&nbspcos() </button>
+<button id='tan'  onclick="myTrigHandler('tan')"  >  &nbsp&nbsptan() </button> <br/>
+<button id='asin' onclick="myTrigHandler('asin')" >  asin() </button> 
+<button id='acos' onclick="myTrigHandler('acos')" >  acos() </button> 
+<button id='atan' onclick="myTrigHandler('atan')" >  atan() </button> 
+
+<br/>
+<button id='pi' onclick="myKeyHandler('pi')">&#960</button> 
+<button id='(' onclick="myKeyHandler('(')" > ( </button>
+<button id=')' onclick="myKeyHandler(')')" > ) </button>
+<button id='dev' onclick="myKeyHandler('StdDev')" > &#963() </button>
+<br/> 
+<button id='sum' onclick="myKeyHandler('jodi')"> &#931</button> 
+<button id='avg' onclick="myKeyHandler('average')"> Mean()</button> 
+<button id='dft' onclick="myKeyHandler('DFT')"> DFT()</button> 
+<button id='fact' onclick="myKeyHandler('!')">!</button> 
+<button id='sqroot'  onclick="myKeyHandler('root')">&#8730 </button> 
+<button id='sqr'  onclick="myKeyHandler('square')"> x<sup>2</sup></button> 
+<br/>
+
+
+<input type="button" id='key7' value="7" onclick="myKeyHandler(this.value)" > </input> 
+<input type="button" id='key8' value="8" onclick="myKeyHandler(this.value)" > </input>
+<input type="button" id='key9' value="9" onclick="myKeyHandler(this.value)" > </input>
+&nbsp &nbsp &nbsp
+<button id='key9' onclick="delKeyClick()">DEL</button> 
+<button id='key9' onclick="myAllClear()">AC</button> 
+&nbsp &nbsp &nbsp
+<br/><br/>
+<button id='key4' onclick="myKeyHandler('4')">4</button> 
+<button id='key5' onclick="myKeyHandler('5')">5</button> 
+<button id='key6' onclick="myKeyHandler('6')">6</button>
+&nbsp &nbsp &nbsp
+<button id='keyMUL' onclick="myKeyHandler('*')">  x  </button> 
+<button id='keyDIV' onclick="myKeyHandler('/')">  &#247  </button> 
+<br/> <br/>
+<button id='key1' onclick="myKeyHandler('1')">1</button> 
+<button id='key2' onclick="myKeyHandler('2')">2</button> 
+<button id='key3' onclick="myKeyHandler('3')">3</button>
+&nbsp &nbsp &nbsp
+<button id='keyADD' onclick="myKeyHandler('+')">  +  </button> 
+<button id='keyDIV' onclick="myKeyHandler('-')">  - </button> 
+<br/> <br/>
+<button id='key0' onclick="myKeyHandler('0')">0</button> 
+<button id='keydp' onclick="myKeyHandler('.')">.</button> 
+<button id='keycomma' onclick="myKeyHandler(',')">,</button> 
+<button id='key10powX' onclick=""             > 10<sup>x</sup></button>
+
+<button id='keyADD' onclick=""        >  Ans </button> 
+<button id='key=' class='bigButton' onclick="eqKeyClicked()">   =   </button> 
+<hr>
+<p id='lastLine'> </p>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
