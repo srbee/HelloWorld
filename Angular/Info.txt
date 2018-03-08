@@ -2,3 +2,10 @@ This folder contains :
 1)html file for the calc app,
 2)controller for the corresponding html file,
 3) css file for the app.
+4) minified angular.js file(as a back up), so that it can be included in the structure. The app, anyhow itself downloads it if internet connection is there. We can comment/umcomment the two script tags in the html file depending upon the availabilty of internet connection.
+
+
+
+For basic understading of AngularJS the below site can be refered:
+https://www.w3schools.com/angular/default.asp
+It has an online editor that can help in having hands-on experience.
