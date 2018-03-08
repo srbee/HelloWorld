@@ -1,8 +1,5 @@
 var app = angular.module('myCalcApp', []);
 app.controller('myCalcController', ['$scope', function(scope) {
-    scope.firstName = "John";
-    scope.lastName = "Doe";
-
     /*
     Code Added from here
     */
