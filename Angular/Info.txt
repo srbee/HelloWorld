@@ -1,0 +1,4 @@
+This folder contains : 
+1)html file for the calc app,
+2)controller for the corresponding html file,
+3) css file for the app.
