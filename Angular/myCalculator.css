@@ -1,0 +1,31 @@
+#myDisplay {
+    font-size: 12px;
+	border: 2px solid red;
+	outline-style: solid green;
+	width:90%;
+	background-color: yellow;
+	margin: 4px 2px;
+     }
+ 
+ 
+ 
+
+#kbd {
+    border: 2px solid red;
+	outline-style: solid green;
+	width:80%;
+	background-color: beige;
+     }
+	 
+.bigButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    
+}

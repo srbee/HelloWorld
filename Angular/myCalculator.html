@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <title> My Calculator </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>  
+        <!-- <script src="angular.min.js"></script> -->  <!-- this script can be uncommented when app is run without net connection-->
+        <script src="myCalculatorController.js"></script>
+        <link rel="stylesheet" href="myCalculator.css">
+
+    </head>
+
+    <body ng-app="myCalcApp" ng-controller="myCalcController" ng-init="shriGanesh()">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <div id='kbd'>
+        <h3>  Kasa Basa Calci </h3>
+        <h4> 
+            Developer - S R Bhide
+            <br/>{{today | date}} 
+        </h4>
+        
+        <div id='myDisplay' >{{displayText}}
+            <p ng-if="dft.length>0" ng-repeat="f in dft">
+                &nbsp&nbsp&nbsp{{f + (dft.length>1 && !($last)? ",": " ")}}
+            </p>
+        </div> 
+        <button id='myMess' ng-style="{'backgroundColor': isRadian? 'red': 'yellow'}">Angles {{myTrigFlag == 1 ? "" : "are"}} in {{isRadian ? "Radians" : "Degrees"}}</button> 
+        <hr>
+
+        Toggle&#8594<button id='Deg' ng-style="{'backgroundColor': isRadian? 'red': 'yellow'}" ng-click="myToggleDeg()" > {{isRadian ? "Radians" : "Degrees"}} </button><br/> 
+
+        <button id='sin'  ng-click="myTrigHandler('sin')"  >  &nbsp&nbspsin() </button>  
+        <button id='cos'  ng-click="myTrigHandler('cos')"  >  &nbsp&nbspcos() </button>
+        <button id='tan'  ng-click="myTrigHandler('tan')"  >  &nbsp&nbsptan() </button> <br/>
+        <button id='asin' ng-click="myTrigHandler('asin')" >  asin() </button> 
+        <button id='acos' ng-click="myTrigHandler('acos')" >  acos() </button> 
+        <button id='atan' ng-click="myTrigHandler('atan')" >  atan() </button> 
+
+        <br/>
+        <button id='pi' ng-click="myKeyHandler('pi')">&#960</button> 
+        <button id='(' ng-click="myKeyHandler('(')" > ( </button>
+        <button id=')' ng-click="myKeyHandler(')')" > ) </button>
+        <button id='dev' ng-click="myKeyHandler('StdDev')" > &#963() </button>
+        <br/> 
+        <button id='sum' ng-click="myKeyHandler('jodi')"> &#931</button> 
+        <button id='avg' ng-click="myKeyHandler('average')"> Mean()</button> 
+        <button id='dft' ng-click="myKeyHandler('DFT')"> DFT()</button> 
+        <button id='fact' ng-click="myKeyHandler('!')">!</button> 
+        <button id='sqroot'  ng-click="myKeyHandler('root')">&#8730 </button> 
+        <button id='sqr'  ng-click="myKeyHandler('square')"> x<sup>2</sup></button> 
+        <br/>
+
+
+        <input type="button" id='key7' value="7" ng-click="myKeyHandler('7')" > </input> 
+        <input type="button" id='key8' value="8" ng-click="myKeyHandler('8')" > </input>
+        <input type="button" id='key9' value="9" ng-click="myKeyHandler('9')" > </input>
+        &nbsp &nbsp &nbsp
+        <button id='key9' ng-click="delKeyClick()">DEL</button> 
+        <button id='key9' ng-click="myAllClear()">AC</button> 
+        &nbsp &nbsp &nbsp
+        <br/><br/>
+        <button id='key4' ng-click="myKeyHandler('4')">4</button> 
+        <button id='key5' ng-click="myKeyHandler('5')">5</button> 
+        <button id='key6' ng-click="myKeyHandler('6')">6</button>
+        &nbsp &nbsp &nbsp
+        <button id='keyMUL' ng-click="myKeyHandler('*')">  x  </button> 
+        <button id='keyDIV' ng-click="myKeyHandler('/')">  &#247  </button> 
+        <br/> <br/>
+        <button id='key1' ng-click="myKeyHandler('1')">1</button> 
+        <button id='key2' ng-click="myKeyHandler('2')">2</button> 
+        <button id='key3' ng-click="myKeyHandler('3')">3</button>
+        &nbsp &nbsp &nbsp
+        <button id='keyADD' ng-click="myKeyHandler('+')">  +  </button> 
+        <button id='keyDIV' ng-click="myKeyHandler('-')">  - </button> 
+        <br/> <br/>
+        <button id='key0' ng-click="myKeyHandler('0')">0</button> 
+        <button id='keydp' ng-click="myKeyHandler('.')">.</button> 
+        <button id='keycomma' ng-click="myKeyHandler(',')">,</button> 
+        <button id='key10powX' ng-click=""             > 10<sup>x</sup></button>
+
+        <button id='keyADD' ng-click="getAns()">  Ans </button> 
+        <button id='key=' class='bigButton' ng-click="eqKeyClicked()">   =   </button> 
+        <hr>
+        <p id='lastLine'> </p>
+
+        </div>
+
+    </body>
+
+</html>
